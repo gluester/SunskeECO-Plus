@@ -7,27 +7,27 @@
 # Thanks, https://www.ascii-art-generator.org/.   
 
 options:
-    TheOnlyOptionWhichShouldBeTheScriptFilesName: SunskeECO/SunskeECO.sk
-    None: Nothing here to be edited, go to plugins/SunskeEcoPlus/config.yml to edit stuff.
+    TheOnlyOptionWhichShouldBeTheScriptFilesName: SunskeECO+/SunskeECO.sk
+    None: Nothing here to be edited, go to plugins/Skript/scripts/SunskeECO+/config.yml to edit stuff.
 on load:
-    if file "plugins/Skript/scripts/SunskeECO/config.yml" is not missing:
-        load yaml "plugins/SunskeEcoPlus/config.yml"
-        set {pre} to yaml value "sunske-eco-prefix"
-        set {defaultBal} to yaml value "default-user-balance"
-        set {header-footer} to yaml value "header-footer"
-        set {version} to yaml value "version"
-        set {versionURL} to yaml value "versionURL"
-        set {mc} to yaml value "main-color"
+    if file "plugins/Skript/scripts/SunskeECO+/config.yml" is not missing:
+        load yaml "plugins/Skript/scripts/SunskeECO+/config.yml" as "config"
+        set {pre} to yaml value "sunske-eco-prefix" from "config"
+        set {defaultBal} to yaml value "default-user-balance" from "config"
+        set {header-footer} to yaml value "header-footer" from "config"
+        set {version} to yaml value "version" from "config"
+        set {versionURL} to yaml value "versionURL" from "config"
+        set {mc} to yaml value "main-color" from "config"
     else:
         broadcast "&3[SUNSKE ECO+] Uh oh! It seems the 'config.yml' file.. doesn't exist? That's weird. Please re-download SunskeEco+ from GitHub, and make sure to drop in the Config file! Sunske Eco+ will stop the server in 20 seconds."
         wait 20 seconds
         execute console command "/stop"
 # PLUGIN CHECK
 on load:
-    if file "plugins/Skript-mirror" is not missing:
-        if file "plugins/TuSKe" is not missing:
-            if file "plugins/skript-yaml.jar" is not missing:
-                if file "%nl%" is set:
+    if file "plugins/skript-mirror/" is not missing:
+        if file "plugins/TuSKe/" is not missing:
+            if file "plugins/skript-yaml.jar/" is not missing:
+                if "%nl%" is set:
                     broadcast "&3All plugins present!"
                 else:
                     broadcast "&4SUNSKE ECO+ > Please download SkQuery."
@@ -142,6 +142,6 @@ command /pay <player> <number>:
         if player's sunske balance >= arg-2:
             removeBalance(player, arg-2)
             addBalance(arg-1, arg-2)
-            message "%{pre}% %mc%%player% %mc%has given %mc%%arg-1%%mc% %arg-3%!" to player and arg-1
+            message "%{pre}% %mc%%player% %mc%has given %mc%%arg-1%%mc% %arg-2!" to player and arg-1
         else:
             send "&cInsufficient money!"
