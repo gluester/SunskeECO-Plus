@@ -1,0 +1,15 @@
+#   _____                 _        ______ _____ ____        
+# / ____|               | |      |  ____/ ____/ __ \   _   
+#| (___  _   _ _ __  ___| | _____| |__ | |   | |  | |_| |_ 
+# \___ \| | | | '_ \/ __| |/ / _ \  __|| |   | |  | |_   _|
+# ____) | |_| | | | \__ \   <  __/ |___| |___| |__| | |_|  
+#|_____/ \__,_|_| |_|___/_|\_\___|______\_____\____/       
+# Thanks, https://www.ascii-art-generator.org/.                                                         
+
+default-user-balance: 100 # The balance a user has when they first join
+header-footer: '&3========SECO+========'
+sunske-eco-prefix: '&3[Sunske ECO] &b> &9'
+main-color: '&9'
+# DO NOT CHANGE THE FOLLOWING 2 OPTIONS! If changed, Version Control will break! If you're using a custom version of SunskeECO, where you also have a website/pastebin/github/etc that can host the Version Control, (Remember to use RAW formats to save lag) then go ahead & edit these.
+version: 1.0
+version-url: 'https://towncrtr.github.io/sunske-eco-plus-version'

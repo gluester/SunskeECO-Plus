@@ -1,0 +1,147 @@
+#   _____                 _        ______ _____ ____        
+# / ____|               | |      |  ____/ ____/ __ \   _   
+#| (___  _   _ _ __  ___| | _____| |__ | |   | |  | |_| |_ 
+# \___ \| | | | '_ \/ __| |/ / _ \  __|| |   | |  | |_   _|
+# ____) | |_| | | | \__ \   <  __/ |___| |___| |__| | |_|  
+#|_____/ \__,_|_| |_|___/_|\_\___|______\_____\____/       
+# Thanks, https://www.ascii-art-generator.org/.   
+
+options:
+    TheOnlyOptionWhichShouldBeTheScriptFilesName: SunskeECO/SunskeECO.sk
+    None: Nothing here to be edited, go to plugins/SunskeEcoPlus/config.yml to edit stuff.
+on load:
+    if file "plugins/Skript/scripts/SunskeECO/config.yml" is not missing:
+        load yaml "plugins/SunskeEcoPlus/config.yml"
+        set {pre} to yaml value "sunske-eco-prefix"
+        set {defaultBal} to yaml value "default-user-balance"
+        set {header-footer} to yaml value "header-footer"
+        set {version} to yaml value "version"
+        set {versionURL} to yaml value "versionURL"
+        set {mc} to yaml value "main-color"
+    else:
+        broadcast "&3[SUNSKE ECO+] Uh oh! It seems the 'config.yml' file.. doesn't exist? That's weird. Please re-download SunskeEco+ from GitHub, and make sure to drop in the Config file! Sunske Eco+ will stop the server in 20 seconds."
+        wait 20 seconds
+        execute console command "/stop"
+# PLUGIN CHECK
+on load:
+    if file "plugins/Skript-mirror" is not missing:
+        if file "plugins/TuSKe" is not missing:
+            if file "plugins/skript-yaml.jar" is not missing:
+                if file "%nl%" is set:
+                    broadcast "&3All plugins present!"
+                else:
+                    broadcast "&4SUNSKE ECO+ > Please download SkQuery."
+            else:
+                broadcast "&4SUNSKE ECO+ > Please download Skript-YAML."
+        else:
+            broadcast "&4SUNSKE ECO+ > Please download TuSKe."
+    else:
+        broadcast "&4SUNSKE ECO+ > Please download Skript-mirror."
+# VERSION CONTROL
+on load:
+    wait 1 tick
+    set {_v} to text from "%{versionURL}%"
+    if {_v} >= {version}:
+        if {_v} >= {version}:
+            broadcast "&3Outdated version of Sunske!"
+            broadcast "https://github.com/gluester/SunskeECOPlus"
+        else:
+            broadcast "&3That's odd... Your version of Sunske seems to be the most recent, however not registered officially..."
+            broadcast "&3...Maybe you customized the Version setting in the config, or the developer hasn't yet changed the website's shown version"
+            wait 3 ticks
+
+# ...END OF VERSION CONTROL
+# The following functions are for the Sunske API. The expressions/conditions/effects(if any) are for the Sunske API. These require Skript-mirror (Not available on hosts such as Minehut.)
+function setBalance(p: offlineplayer, a: number):
+    set {_pu} to {_p}'s uuid
+    set {balance::%{_pu}%} to {_a}
+function addBalance(p: offlineplayer, a: number):
+    set {_pu} to {_p}'s uuid
+    add {_a} to {balance::%{_pu}%}
+function removeBalance(p: offlineplayer, a: number):
+    set {_pu} to {_p}'s uuid
+    remove {_a} from {balance::%{_pu}%}
+expression %$offlineplayer%'s sunske balance:
+    get:
+        return {balance::%expression-1's uuid%}
+expression mc:
+    get:
+        return {mc}
+expression balance set message:
+    get:
+        return "%mc% Set player's balance"
+# end of Sunske API.
+command /sunske <text>:
+    permission: sunske.admin
+    trigger:
+        if arg-1 is "reload":
+            broadcast "&3[SunskeEco+] Reloading Config & Main Script."
+            execute console command "/sk reload {@TheOnlyOptionWhichShouldBeTheScriptFilesName}"
+            wait 5 seconds
+            broadcast "%{pre}% Reloaded"
+        else if arg-1 is "help":
+            message "%{header-footer}%"
+            message ""
+            message "&3Sunske ECO"
+            message ""
+            message "&b/sunske help"
+            message ""
+            message "&b/sunske reload"
+            message ""
+            message "&3Sunske API Info"
+            message ""
+            message "&9Functions:"
+            message "&9removeBalance(player, amount) - Removes the specific amount from a player's balance."
+            message "&9addBalance(player, amount) - Adds the specific amount to a player's balance."
+            message "&9setBalance(player, amount) - Sets a player's balance to the specific amount."
+            message "&9EXPRESSIONS/EFFECTS/CONDITIONS &3(Skript-Mirror)"
+            message "&9%%player%%'s sunske balance - Returns the player's balance."
+            message "&9&oMore Coming!"
+            message ""
+            message "%{header-footer}%"
+command /wallet [<player>]:
+    aliases: bal, balance, sunske:wallet, ebal, ebalance
+    permission: sunske.wallet
+    trigger:
+        if arg-1 is set:
+            if arg-1 is online:
+                send "%arg-1%%mc%'s Balance: &3%arg-1's sunske balance%"
+            else:
+                if arg-1 has played before:
+                    send "%{pre}% %arg-1%%mc%'s Balance: &3%arg-1's sunske balance%"
+                else:
+                    send "&cThat player hasn't joined!"
+        else:
+            send "%{pre}% Your Balance: %mc%%player's sunske balance%"
+on join:
+    if {balance::%player's uuid%} isn't set:
+        set {balance::%player's uuid%} to {defaultBal}
+        log "[Sunske ECO+] Set %player%'s balance."
+command /moneycontrol <offlineplayer> <text> <number>:
+    permission: sunske.admin, sunske.moneycontrol
+    aliases: eco, sunske:moneycontrol, economy, eeco, eeconomy
+    usage: &3MoneyControl Help &9%nl%&9 /moneycontrol (player) set (number) - Sets a player's balance %nl%&9/moneycontrol (player) add (number) - Adds an amount to a player's balance%nl%&9/moneycontrol (player) remove (number) - Removes an amount frm a player's balance.
+    trigger:
+        if arg-2 is "set":
+            setBalance(arg-1, arg-3)
+            send "%balance set message%%mc% to %arg-3%!"
+        else if arg-2 is "add":
+            set {_bal} to arg-1's sunske balance + arg-3
+            addBalance(arg-1, arg-3)
+            send "%mc%%arg-1%%mc%'s balance is now %{_bal}%!"
+        else if arg-2 is "remove":
+            set {_bal} to arg-1's sunske balance - arg-3
+            removeBalance(arg-1, arg-3)
+            send "%mc%%arg-1%%mc%'s balance is now %{_bal}%!"
+        else:
+            send "&3MoneyControl Help &9%nl%&9 /moneycontrol (player) set (number) - Sets a player's balance %nl%&9/moneycontrol (player) add (number) - Adds an amount to a player's balance%nl%&9/moneycontrol (player) remove (number) - Removes an amount frm a player's balance."
+command /pay <player> <number>:
+    permission: sunske.pay
+    aliases: sunske:sendcash, sendcash, epay, sendmoney
+    trigger:
+        if player's sunske balance >= arg-2:
+            removeBalance(player, arg-2)
+            addBalance(arg-1, arg-2)
+            message "%{pre}% %mc%%player% %mc%has given %mc%%arg-1%%mc% %arg-3%!" to player and arg-1
+        else:
+            send "&cInsufficient money!"
