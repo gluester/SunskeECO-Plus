@@ -54,16 +54,16 @@ on load:
 # The following functions are for the Sunske API. The expressions/conditions/effects(if any) are for the Sunske API. These require Skript-mirror (Not available on hosts such as Minehut.)
 function setBalance(p: offlineplayer, a: number):
     set {_pu} to {_p}'s uuid
-    set {balance::%{_pu}%} to {_a}
+    set {balance.%{_pu}%} to {_a}
 function addBalance(p: offlineplayer, a: number):
     set {_pu} to {_p}'s uuid
-    add {_a} to {balance::%{_pu}%}
+    add {_a} to {balance.%{_pu}%}
 function removeBalance(p: offlineplayer, a: number):
     set {_pu} to {_p}'s uuid
-    remove {_a} from {balance::%{_pu}%}
+    remove {_a} from {balance.%{_pu}%}
 expression %$offlineplayer%'s sunske balance:
     get:
-        return {balance::%expression-1's uuid%}
+        return {balance.%expression-1's uuid%}
 expression mc:
     get:
         return {mc}
@@ -105,7 +105,7 @@ command /wallet [<player>]:
     trigger:
         if arg-1 is set:
             if arg-1 is online:
-                send "%arg-1%%mc%'s Balance: &3%arg-1's sunske balance%"
+                send "%mc%%arg-1%%mc%'s Balance: &3%arg-1's sunske balance%"
             else:
                 if arg-1 has played before:
                     send "%{pre}% %arg-1%%mc%'s Balance: &3%arg-1's sunske balance%"
@@ -114,8 +114,8 @@ command /wallet [<player>]:
         else:
             send "%{pre}% Your Balance: %mc%%player's sunske balance%"
 on join:
-    if {balance::%player's uuid%} isn't set:
-        set {balance::%player's uuid%} to {defaultBal}
+    if {balance.%player's uuid%} isn't set:
+        set {balance.%player's uuid%} to {defaultBal}
         log "[Sunske ECO+] Set %player%'s balance."
 command /moneycontrol <offlineplayer> <text> <number>:
     permission: sunske.admin, sunske.moneycontrol
