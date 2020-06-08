@@ -19,9 +19,8 @@ on load:
         set {versionURL} to yaml value "versionURL" from "config"
         set {mc} to yaml value "main-color" from "config"
     else:
-        broadcast "&3[SUNSKE ECO+] Uh oh! It seems the 'config.yml' file.. doesn't exist? That's weird. Please re-download SunskeEco+ from GitHub, and make sure to drop in the Config file! Sunske Eco+ will stop the server in 20 seconds."
+        broadcast "&3[SUNSKE ECO+] Uh oh! It seems the 'config.yml' file.. doesn't exist? That's weird. Please re-download SunskeEco+ from GitHub, and make sure to drop in the Config file!"
         wait 20 seconds
-        execute console command "/stop"
 # PLUGIN CHECK
 on load:
     if file "plugins/skript-mirror/" is not missing:
