@@ -139,8 +139,12 @@ command /pay <player> <number>:
     aliases: sunske:sendcash, sendcash, epay, sendmoney
     trigger:
         if player's sunske balance >= arg-2:
-            removeBalance(player, arg-2)
-            addBalance(arg-1, arg-2)
+            if arg-1 <= 0:
+                message "&cYou can't subtract, or send $0 to a player!"
+                stop
+            else:
+                removeBalance(player, arg-2)
+                addBalance(arg-1, arg-2)
             message "%{pre}% %mc%%player% %mc%has given %mc%%arg-1%%mc% %arg-2%%mc%!" to player and arg-1
         else:
             send "&cInsufficient money!"
