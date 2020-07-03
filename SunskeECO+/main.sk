@@ -20,22 +20,21 @@ on load:
         set {mc} to yaml value "main-color" from "config"
     else:
         broadcast "&3[SUNSKE ECO+] Uh oh! It seems the 'config.yml' file.. doesn't exist? That's weird. Please re-download SunskeEco+ from GitHub, and make sure to drop in the Config file!"
-        wait 20 seconds
 # PLUGIN CHECK
+function pluginCheck(t: text) :: boolean: #! huge thanks to Baezor for this more efficient code with skript-mirror :)
+	if Bukkit.getPluginManager().getPlugin({_t}_ is set:
+		return true
+	else:
+		return false
 on load:
-    if file "plugins/skript-mirror/" is not missing:
-        if file "plugins/TuSKe/" is not missing:
-            if file "plugins/skript-yaml.jar/" is not missing:
-                if "%nl%" is set:
-                    broadcast "&3All plugins present!"
-                else:
-                    broadcast "&4SUNSKE ECO+ > Please download SkQuery."
-            else:
-                broadcast "&4SUNSKE ECO+ > Please download Skript-YAML."
-        else:
-            broadcast "&4SUNSKE ECO+ > Please download TuSKe."
+    if pluginCheck("skript-yaml") == true:
+        log "[SunskeECO+] Skript-yaml registered as present."
     else:
-        broadcast "&4SUNSKE ECO+ > Please download Skript-mirror."
+        log "[SunskeECO+] Please download Skript-YAML."
+    if pluginCheck("SkQuery") == true:
+        log "[SunskeECO+] SkQuery registered as present."
+    else:
+        broadcast "&c[SunskeECO+] Please download SkQuery."
 # VERSION CONTROL
 on load:
     wait 1 tick
