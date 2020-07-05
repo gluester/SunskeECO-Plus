@@ -22,7 +22,7 @@ on load:
         broadcast "&3[SUNSKE ECO+] Uh oh! It seems the 'config.yml' file.. doesn't exist? That's weird. Please re-download SunskeEco+ from GitHub, and make sure to drop in the Config file!"
 # PLUGIN CHECK
 function pluginCheck(t: text) :: boolean: #! huge thanks to Baezor for this more efficient code with skript-mirror :)
-	if Bukkit.getPluginManager().getPlugin({_t}_ is set:
+	if Bukkit.getPluginManager().getPlugin({_t}) is set:
 		return true
 	else:
 		return false
